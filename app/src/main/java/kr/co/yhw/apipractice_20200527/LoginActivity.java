@@ -28,7 +28,10 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                ServerUtil.postRequestLogin(mContext,"aaa@bbb.com","qwer1234",null);
+                String email = binding.emailEdt.getText().toString();
+                String password = binding.pwEdt.getText().toString();
+
+                ServerUtil.postRequestLogin(mContext,email,password,null);
             }
         });
     }
