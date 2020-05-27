@@ -3,6 +3,7 @@ package kr.co.yhw.apipractice_20200527;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 
@@ -48,6 +49,17 @@ public class LoginActivity extends BaseActivity {
                             }
                             else{
                                 Log.d("분석결과","로그인실패");
+
+                                final String failReason =json.getString("message");
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(mContext, failReason, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+
 
                             }
                         } catch (JSONException e) {
