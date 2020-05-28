@@ -44,6 +44,57 @@ public class SignUpActivity extends BaseActivity {
 
     @Override
     public void setupEvents() {
+
+//        닉네임 중복확인 버튼 => 서버에 중복확인 요청( 문서 참조)
+//        => 성공일 경우 " 사용해도 좋습니다 "
+//        => 실패일경우 " 중복된 닉네임입니다."
+
+        binding.nickNameCheckBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String inputNickname = binding.nickNameEdt.getText().toString();
+
+                ServerUtil.getRequestDuplicatedCheck(mContext, inputNickname, "NICKNAME", new ServerUtil.JsonResponseHandler() {
+                    @Override
+                    public void onResponse(JSONObject json) {
+
+                        Log.d("중복검사확인",json.toString());
+
+                        try {
+                            int code = json.getInt("code");
+                            String nicknameRepeatCheck;
+
+                            if(code == 200){
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(mContext, "사용해도 좋은 닉네임입니다.", Toast.LENGTH_SHORT).show();
+                                        binding.nickNameCheckResult.setText("사용해도 좋은 닉네임입니다.");
+                                        binding.nickNameCheckResult.setTextColor(Color.parseColor("#2767e3"));
+                                    }
+                                });
+                            }
+                            else {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(mContext, "중복된 닉네임입니다.", Toast.LENGTH_SHORT).show();
+                                        binding.nickNameCheckResult.setText("중복된 닉네임입니다.");
+                                        binding.nickNameCheckResult.setTextColor(Color.RED);
+                                    }
+                                });
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
+
+
+
 //        이메일을 변경시
         binding.emailEdt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -80,7 +131,6 @@ public class SignUpActivity extends BaseActivity {
                         try {
                             int code = json.getInt("code");
                             String emailRepeatCheck;
-
 
                             if (code == 200) {
 //                                중복검사 통과
