@@ -55,6 +55,11 @@ public class LoginActivity extends BaseActivity {
                             int code = json.getInt("code");
                             if ( code ==200){
                                 Log.d("분석결과","로그인성공");
+
+                                JSONObject data = json.getJSONObject("data");
+                                String token = data.getString("token");
+
+
                             }
                             else{
                                 Log.d("분석결과","로그인실패");
