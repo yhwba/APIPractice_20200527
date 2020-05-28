@@ -47,7 +47,7 @@ public class SignUpActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                checkPasswords();
+
 
             }
 
@@ -64,7 +64,7 @@ public class SignUpActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                checkPasswords();
+
             }
 
             @Override
@@ -73,7 +73,12 @@ public class SignUpActivity extends BaseActivity {
             }
         });
 //        응용문제 => 비번과 / 비번확인중 어느것을 타이핑해도 매번 둘다 검사.
-        void checkPasswords () {
+
+    }
+        boolean checkPasswords () {
+
+            boolean isPwOk = false;
+
             String pw = binding.pwEdt.getText().toString();
             if (pw.length() == 0) {
                 binding.pwCheckResultTxt.setText("비밀번호를 입력해주세요");
@@ -84,8 +89,10 @@ public class SignUpActivity extends BaseActivity {
             } else {
                 binding.pwCheckResultTxt.setText("사용해도 좋은 비밀번호입니다.");
                 binding.pwCheckResultTxt.setTextColor(Color.parseColor("#2767e3"));
+                isPwOk = true;
             }
 
+            boolean isPwRepeatOk = false;
             String pwRepeat = binding.pwRepeatEdt.getText().toString();
             if (pwRepeat.length() == 0) {
                 binding.pwrepeatCheckResultTxt.setText("비밀번호를 입력해주세요");
@@ -93,37 +100,21 @@ public class SignUpActivity extends BaseActivity {
             } else if (pwRepeat.equals(binding.pwEdt.getText().toString())) {
                 binding.pwrepeatCheckResultTxt.setText("비밀번호 재입력이 확인되었습니다");
                 binding.pwrepeatCheckResultTxt.setTextColor(Color.parseColor("#2767e3"));
+                isPwRepeatOk = true;
             } else {
                 binding.pwrepeatCheckResultTxt.setText("비밀번호가 서로 다릅니다.");
                 binding.pwrepeatCheckResultTxt.setTextColor(Color.RED);
             }
 
+            return isPwOk && isPwRepeatOk;
 
         }
 
-//        이메일 확인
 
 
-        binding.emailCheckBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String input = binding.emailEdt.toString();
-                if (input.contains("@") && input.length() >= 6) {
-                    binding.emailCheckedResult.setText("사용해도 좋은 이메일입니다.");
-                    binding.emailCheckedResult.setTextColor(Color.parseColor("#2767e3"));
-                } else {
-                    if (input.length() == 0) {
-                        binding.emailCheckedResult.setText("사용가능한 이메일을 입력바랍니다.");
-                        binding.emailCheckedResult.setTextColor(Color.parseColor("#A0A0A0"));
-                    } else {
-                        binding.emailCheckedResult.setText("이메일 양식으로 입력바랍니다.");
-                        binding.emailCheckedResult.setTextColor(Color.RED);
-                    }
 
-                }
-            }
-        });
-    }
+
+
 
 
     @Override
