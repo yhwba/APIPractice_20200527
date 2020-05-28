@@ -9,7 +9,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import kr.co.yhw.apipractice_20200527.databinding.ActivitySignUpBinding;
@@ -53,6 +55,42 @@ public class SignUpActivity extends BaseActivity {
                     public void onResponse(JSONObject json) {
 
                         Log.d("중복응답확인", json.toString());
+
+                        try {
+                            int code = json.getInt("code");
+                            String emailRepeatCheck
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                }
+                            });
+
+                            if( code ==200){
+//                                중복검사 통과
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(mContext, "사용해도 좋은 아이디입니다.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                            }
+                            else {
+//                                중복검사 에러
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(mContext, "중복검사에 통과하지 못했습니다.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
 
