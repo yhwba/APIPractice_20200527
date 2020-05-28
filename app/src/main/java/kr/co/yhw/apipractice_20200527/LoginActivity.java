@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import kr.co.yhw.apipractice_20200527.databinding.ActivityLoginBinding;
+import kr.co.yhw.apipractice_20200527.utils.ContextUtil;
 import kr.co.yhw.apipractice_20200527.utils.ServerUtil;
 
 public class LoginActivity extends BaseActivity {
@@ -59,6 +60,7 @@ public class LoginActivity extends BaseActivity {
                                 JSONObject data = json.getJSONObject("data");
                                 String token = data.getString("token");
 
+                                ContextUtil.setLoginUserToken(mContext,token);
 
                             }
                             else{
