@@ -47,8 +47,7 @@ public class SignUpActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-
+                checkSignUpEnable();
             }
 
             @Override
@@ -64,7 +63,7 @@ public class SignUpActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                checkSignUpEnable();
             }
 
             @Override
@@ -110,7 +109,12 @@ public class SignUpActivity extends BaseActivity {
 
         }
 
+//    아이디중복 / 비번확인 / 닉네임 중복이 모두 통과여야, 회원가입버튼 활성화
+    //    하나라도 틀리면 회원가입버튼 비활성화
+    void checkSignUpEnable() {
 
+        boolean isAllPasswordOk = checkPasswords();
+    }
 
 
 
