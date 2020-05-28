@@ -26,7 +26,7 @@
                 android:hint="이메일양식으로 입력바랍니다." />
 
             <Button
-                android:id="@+id/emailCheckBtn"
+                android:id="@+id/idCheckBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -35,7 +35,7 @@
         </FrameLayout>
 
         <TextView
-            android:id="@+id/emailCheckedResult"
+            android:id="@+id/emailCheckeResult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="중복검사를 해주세요"

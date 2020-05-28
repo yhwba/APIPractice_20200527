@@ -7,9 +7,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 
+import org.json.JSONObject;
+
 import kr.co.yhw.apipractice_20200527.databinding.ActivitySignUpBinding;
+import kr.co.yhw.apipractice_20200527.utils.ServerUtil;
 
 public class SignUpActivity extends BaseActivity {
 
@@ -36,6 +40,25 @@ public class SignUpActivity extends BaseActivity {
 
     @Override
     public void setupEvents() {
+
+
+        binding.idCheckBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String inputEmail = binding.emailEdt.getText().toString();
+
+                ServerUtil.getRequestDuplicatedCheck(mContext, inputEmail, "EMAIL", new ServerUtil.JsonResponseHandler() {
+                    @Override
+                    public void onResponse(JSONObject json) {
+
+                        Log.d("중복응답확인", json.toString());
+                    }
+                });
+
+
+            }
+        });
 
 
 //        비밀번호 확인
