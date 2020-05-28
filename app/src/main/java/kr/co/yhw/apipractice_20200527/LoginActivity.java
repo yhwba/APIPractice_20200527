@@ -62,6 +62,11 @@ public class LoginActivity extends BaseActivity {
 
                                 ContextUtil.setLoginUserToken(mContext,token);
 
+                                Intent myIntent = new Intent(mContext,MainActivity.class);
+                                startActivity(myIntent);
+
+                                finish();
+
                             }
                             else{
                                 Log.d("분석결과","로그인실패");
