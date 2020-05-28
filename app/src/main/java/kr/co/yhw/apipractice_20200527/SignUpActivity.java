@@ -20,6 +20,8 @@ import kr.co.yhw.apipractice_20200527.utils.ServerUtil;
 public class SignUpActivity extends BaseActivity {
 
     ActivitySignUpBinding binding;
+
+    boolean idCheckOk = false;
 //    응용문제
 //    비번은 타이필 할때마다 길이검사
 //    => 0 글자 : 비밀번호 입력해주세요
@@ -42,8 +44,7 @@ public class SignUpActivity extends BaseActivity {
 
     @Override
     public void setupEvents() {
-
-
+//        아이디 중복검사
         binding.idCheckBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,7 +59,7 @@ public class SignUpActivity extends BaseActivity {
 
                         try {
                             int code = json.getInt("code");
-                            String emailRepeatCheck
+                            String emailRepeatCheck;
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -66,27 +67,38 @@ public class SignUpActivity extends BaseActivity {
                                 }
                             });
 
-                            if( code ==200){
+                            if (code == 200) {
 //                                중복검사 통과
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Toast.makeText(mContext, "사용해도 좋은 아이디입니다.", Toast.LENGTH_SHORT).show();
+                                        binding.idCheckeResult.setText("사용해도 좋은 아이디입니다.");
+                                        binding.idCheckeResult.setTextColor(Color.parseColor("#2767e3"));
+
+                                        idCheckOk =true;
                                     }
                                 });
 
-                            }
-                            else {
+                            } else {
 //                                중복검사 에러
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Toast.makeText(mContext, "중복검사에 통과하지 못했습니다.", Toast.LENGTH_SHORT).show();
+                                        binding.idCheckeResult.setText("중복검사에 통과하지 못했습니다.");
+                                        binding.idCheckeResult.setTextColor(Color.RED);
                                     }
                                 });
 
-
                             }
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    checkSignUpEnable();
+                                }
+                            });
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -135,55 +147,50 @@ public class SignUpActivity extends BaseActivity {
 //        응용문제 => 비번과 / 비번확인중 어느것을 타이핑해도 매번 둘다 검사.
 
     }
-        boolean checkPasswords () {
 
-            boolean isPwOk = false;
+    boolean checkPasswords() {
 
-            String pw = binding.pwEdt.getText().toString();
-            if (pw.length() == 0) {
-                binding.pwCheckResultTxt.setText("비밀번호를 입력해주세요");
-                binding.pwCheckResultTxt.setTextColor(Color.parseColor("#A0A0A0"));
-            } else if (pw.length() < 8) {
-                binding.pwCheckResultTxt.setText("비밀번호가 너무 짧습니다.");
-                binding.pwCheckResultTxt.setTextColor(Color.RED);
-            } else {
-                binding.pwCheckResultTxt.setText("사용해도 좋은 비밀번호입니다.");
-                binding.pwCheckResultTxt.setTextColor(Color.parseColor("#2767e3"));
-                isPwOk = true;
-            }
+        boolean isPwOk = false;
 
-            boolean isPwRepeatOk = false;
-            String pwRepeat = binding.pwRepeatEdt.getText().toString();
-            if (pwRepeat.length() == 0) {
-                binding.pwrepeatCheckResultTxt.setText("비밀번호를 입력해주세요");
-                binding.pwrepeatCheckResultTxt.setTextColor(Color.parseColor("#A0A0A0"));
-            } else if (pwRepeat.equals(binding.pwEdt.getText().toString())) {
-                binding.pwrepeatCheckResultTxt.setText("비밀번호 재입력이 확인되었습니다");
-                binding.pwrepeatCheckResultTxt.setTextColor(Color.parseColor("#2767e3"));
-                isPwRepeatOk = true;
-            } else {
-                binding.pwrepeatCheckResultTxt.setText("비밀번호가 서로 다릅니다.");
-                binding.pwrepeatCheckResultTxt.setTextColor(Color.RED);
-            }
-
-            return isPwOk && isPwRepeatOk;
-
+        String pw = binding.pwEdt.getText().toString();
+        if (pw.length() == 0) {
+            binding.pwCheckResultTxt.setText("비밀번호를 입력해주세요");
+            binding.pwCheckResultTxt.setTextColor(Color.parseColor("#A0A0A0"));
+        } else if (pw.length() < 8) {
+            binding.pwCheckResultTxt.setText("비밀번호가 너무 짧습니다.");
+            binding.pwCheckResultTxt.setTextColor(Color.RED);
+        } else {
+            binding.pwCheckResultTxt.setText("사용해도 좋은 비밀번호입니다.");
+            binding.pwCheckResultTxt.setTextColor(Color.parseColor("#2767e3"));
+            isPwOk = true;
         }
 
-//    아이디중복 / 비번확인 / 닉네임 중복이 모두 통과여야, 회원가입버튼 활성화
+        boolean isPwRepeatOk = false;
+        String pwRepeat = binding.pwRepeatEdt.getText().toString();
+        if (pwRepeat.length() == 0) {
+            binding.pwrepeatCheckResultTxt.setText("비밀번호를 입력해주세요");
+            binding.pwrepeatCheckResultTxt.setTextColor(Color.parseColor("#A0A0A0"));
+        } else if (pwRepeat.equals(binding.pwEdt.getText().toString())) {
+            binding.pwrepeatCheckResultTxt.setText("비밀번호 재입력이 확인되었습니다");
+            binding.pwrepeatCheckResultTxt.setTextColor(Color.parseColor("#2767e3"));
+            isPwRepeatOk = true;
+        } else {
+            binding.pwrepeatCheckResultTxt.setText("비밀번호가 서로 다릅니다.");
+            binding.pwrepeatCheckResultTxt.setTextColor(Color.RED);
+        }
+
+        return isPwOk && isPwRepeatOk;
+
+    }
+
+    //    아이디중복 / 비번확인 / 닉네임 중복이 모두 통과여야, 회원가입버튼 활성화
     //    하나라도 틀리면 회원가입버튼 비활성화
     void checkSignUpEnable() {
 
         boolean isAllPasswordOk = checkPasswords();
 
-        boolean isIdDuplCheckOk = true;
-
-        binding.signUpBtn.setEnabled(isAllPasswordOk && isIdDuplCheckOk);
+        binding.signUpBtn.setEnabled(isAllPasswordOk && idCheckOk );
     }
-
-
-
-
 
 
     @Override
