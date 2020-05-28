@@ -44,6 +44,26 @@ public class SignUpActivity extends BaseActivity {
 
     @Override
     public void setupEvents() {
+//        이메일을 변경시
+        binding.emailEdt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                이메일을 변경하면 무조건 중복검사 실패로 변경 => 재검사 요구
+                idCheckOk = false;
+                binding.idCheckeResult.setText("중복검사를 해주세요.");
+//                회원가입 버튼 비활성화 체크
+                checkSignUpEnable();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 //        아이디 중복검사
         binding.idCheckBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,12 +80,7 @@ public class SignUpActivity extends BaseActivity {
                         try {
                             int code = json.getInt("code");
                             String emailRepeatCheck;
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
 
-                                }
-                            });
 
                             if (code == 200) {
 //                                중복검사 통과
