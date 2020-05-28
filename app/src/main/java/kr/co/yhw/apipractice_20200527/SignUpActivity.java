@@ -22,6 +22,8 @@ public class SignUpActivity extends BaseActivity {
     ActivitySignUpBinding binding;
 
     boolean idCheckOk = false;
+    boolean isNickNameCheckOk = false;
+
 //    응용문제
 //    비번은 타이필 할때마다 길이검사
 //    => 0 글자 : 비밀번호 입력해주세요
@@ -45,6 +47,28 @@ public class SignUpActivity extends BaseActivity {
     @Override
     public void setupEvents() {
 
+
+        binding.nickNameEdt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isNickNameCheckOk = false;
+                binding.nickNameCheckResult.setText("중복검사를 해주세요.");
+                binding.nickNameCheckResult.setTextColor(Color.parseColor("#A0A0A0"));
+
+                checkSignUpEnable();
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 //        닉네임 중복확인 버튼 => 서버에 중복확인 요청( 문서 참조)
 //        => 성공일 경우 " 사용해도 좋습니다 "
 //        => 실패일경우 " 중복된 닉네임입니다."
@@ -58,23 +82,23 @@ public class SignUpActivity extends BaseActivity {
                     @Override
                     public void onResponse(JSONObject json) {
 
-                        Log.d("중복검사확인",json.toString());
+                        Log.d("중복검사확인", json.toString());
 
                         try {
                             int code = json.getInt("code");
                             String nicknameRepeatCheck;
 
-                            if(code == 200){
+                            if (code == 200) {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Toast.makeText(mContext, "사용해도 좋은 닉네임입니다.", Toast.LENGTH_SHORT).show();
                                         binding.nickNameCheckResult.setText("사용해도 좋은 닉네임입니다.");
                                         binding.nickNameCheckResult.setTextColor(Color.parseColor("#2767e3"));
+                                        isNickNameCheckOk =true;
                                     }
                                 });
-                            }
-                            else {
+                            } else {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -84,7 +108,12 @@ public class SignUpActivity extends BaseActivity {
                                     }
                                 });
                             }
-
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    checkSignUpEnable();
+                                }
+                            });
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -94,13 +123,13 @@ public class SignUpActivity extends BaseActivity {
         });
 
 
-
 //        이메일을 변경시
         binding.emailEdt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 //                이메일을 변경하면 무조건 중복검사 실패로 변경 => 재검사 요구
@@ -141,7 +170,7 @@ public class SignUpActivity extends BaseActivity {
                                         binding.idCheckeResult.setText("사용해도 좋은 아이디입니다.");
                                         binding.idCheckeResult.setTextColor(Color.parseColor("#2767e3"));
 
-                                        idCheckOk =true;
+                                        idCheckOk = true;
                                     }
                                 });
 
@@ -254,7 +283,7 @@ public class SignUpActivity extends BaseActivity {
 
         boolean isAllPasswordOk = checkPasswords();
 
-        binding.signUpBtn.setEnabled(isAllPasswordOk && idCheckOk );
+        binding.signUpBtn.setEnabled(isAllPasswordOk && idCheckOk && isNickNameCheckOk);
     }
 
 
