@@ -33,8 +33,10 @@ public class SignUpActivity extends BaseActivity {
         setValues();
     }
 
+
     @Override
     public void setupEvents() {
+
 
 //        비밀번호 확인
         binding.pwEdt.addTextChangedListener(new TextWatcher() {
@@ -45,23 +47,9 @@ public class SignUpActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String pw = s.toString();
-                if(pw.length() == 0){
-                    binding.pwCheckResultTxt.setText("비밀번호를 입력해주세요");
-                    binding.pwCheckResultTxt.setTextColor(Color.parseColor("#A0A0A0"));
-                }
-                else if (pw.length() < 8){
-                    binding.pwCheckResultTxt.setText("비밀번호가 너무 짧습니다.");
-                    binding.pwCheckResultTxt.setTextColor(Color.RED);
-                }
-                else {
-                    binding.pwCheckResultTxt.setText("사용해도 좋은 비밀번호입니다.");
-                    binding.pwCheckResultTxt.setTextColor(Color.parseColor("#2767e3"));
-                }
+                checkPasswords();
 
             }
-
-
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -76,19 +64,7 @@ public class SignUpActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String pwRepeat = s.toString();
-                if(pwRepeat.length() == 0){
-                    binding.pwrepeatCheckResultTxt.setText("비밀번호를 입력해주세요");
-                    binding.pwrepeatCheckResultTxt.setTextColor(Color.parseColor("#A0A0A0"));
-                }
-                else if (pwRepeat.equals(binding.pwEdt.getText().toString())){
-                    binding.pwrepeatCheckResultTxt.setText("비밀번호 재입력이 확인되었습니다");
-                    binding.pwrepeatCheckResultTxt.setTextColor(Color.parseColor("#2767e3"));
-                }
-                else {
-                    binding.pwrepeatCheckResultTxt.setText("비밀번호가 서로 다릅니다.");
-
-                }
+                checkPasswords();
             }
 
             @Override
@@ -96,8 +72,37 @@ public class SignUpActivity extends BaseActivity {
 
             }
         });
+//        응용문제 => 비번과 / 비번확인중 어느것을 타이핑해도 매번 둘다 검사.
+        void checkPasswords () {
+            String pw = binding.pwEdt.getText().toString();
+            if (pw.length() == 0) {
+                binding.pwCheckResultTxt.setText("비밀번호를 입력해주세요");
+                binding.pwCheckResultTxt.setTextColor(Color.parseColor("#A0A0A0"));
+            } else if (pw.length() < 8) {
+                binding.pwCheckResultTxt.setText("비밀번호가 너무 짧습니다.");
+                binding.pwCheckResultTxt.setTextColor(Color.RED);
+            } else {
+                binding.pwCheckResultTxt.setText("사용해도 좋은 비밀번호입니다.");
+                binding.pwCheckResultTxt.setTextColor(Color.parseColor("#2767e3"));
+            }
+
+            String pwRepeat = binding.pwRepeatEdt.getText().toString();
+            if (pwRepeat.length() == 0) {
+                binding.pwrepeatCheckResultTxt.setText("비밀번호를 입력해주세요");
+                binding.pwrepeatCheckResultTxt.setTextColor(Color.parseColor("#A0A0A0"));
+            } else if (pwRepeat.equals(binding.pwEdt.getText().toString())) {
+                binding.pwrepeatCheckResultTxt.setText("비밀번호 재입력이 확인되었습니다");
+                binding.pwrepeatCheckResultTxt.setTextColor(Color.parseColor("#2767e3"));
+            } else {
+                binding.pwrepeatCheckResultTxt.setText("비밀번호가 서로 다릅니다.");
+                binding.pwrepeatCheckResultTxt.setTextColor(Color.RED);
+            }
+
+
+        }
 
 //        이메일 확인
+
 
         binding.emailCheckBtn.setOnClickListener(new View.OnClickListener() {
             @Override
